@@ -1,0 +1,14 @@
+.todos ul{
+    display: flex;
+    flex-wrap: wrap;
+}
+.todos li{
+    margin-bottom: 10px;
+    list-style-type:none;
+}
+.todos__card{
+    padding: 10px;
+    border: 1px solid black;
+    background: #90EE90;
+
+}
