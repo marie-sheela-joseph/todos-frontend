@@ -1,11 +1,11 @@
 import { useAppDispatch } from "src/store/hooks"
-import { postTodos } from "src/store/slices/todos/todosSlice"
+import { postTodo } from "src/store/slices/todos/todosSlice"
 
 const AddTodo = () => {
     const dispatch=useAppDispatch()
   return (
     <div>AddTodo
-        <button onClick={()=>dispatch(postTodos(
+        <button onClick={()=>dispatch(postTodo(
             { 
                 "title":"todo2",
                 "completed":false,
