@@ -39,11 +39,23 @@ type updateTodoType = {
 
 export interface todosState {
   todos: todoType[];
+  currentTodo: todoType;
   status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: todosState = {
   todos: [],
+  currentTodo: {
+    _id: '',
+    title: '',
+    completed: false,
+    assignedTo: [''],
+    createdAt: new Date(),
+    moreDetails: {
+      priority: 1,
+      dueDate: new Date(),
+    },
+  },
   status: 'idle',
 };
 
@@ -62,7 +74,7 @@ export const getTodos = createAsyncThunk('todos/getTodos', async () => {
   return data;
 });
 
-export const postTodos = createAsyncThunk(
+export const postTodo = createAsyncThunk(
   'todos/postTodo',
   async (todo: newTodoType) => {
     const response = await fetch(url, {
@@ -94,6 +106,7 @@ export const patchTodo = createAsyncThunk(
   'todos/patchTodo',
   async (todo: updateTodoType) => {
     const { _id } = todo;
+    console.log(_id);
     const response = await fetch(`${url}/${_id}`, {
       method: 'PATCH',
       headers: {
@@ -108,6 +121,17 @@ export const patchTodo = createAsyncThunk(
     return data;
   }
 );
+
+export const getTodo = createAsyncThunk('todos/getTodo', async (id: string) => {
+  console.log(`get todo`);
+  const response = await fetch(`${url}/${id}`, {
+    method: 'GET',
+  });
+  const data = response.json();
+  // The value we return becomes the `fulfilled` action payload
+  console.log(data);
+  return data;
+});
 
 export const todosSlice = createSlice({
   name: 'todos',
@@ -144,19 +168,28 @@ export const todosSlice = createSlice({
       .addCase(getTodos.rejected, (state) => {
         state.status = 'failed';
       })
-      .addCase(postTodos.fulfilled, (state, action) => {
+      .addCase(postTodo.fulfilled, (state, action) => {
+        console.log('post');
         state.todos.push(action.payload);
       })
       .addCase(deleteTodo.fulfilled, (state, action) => {
+        console.log('del', action);
         const { _id } = action.payload;
         if (_id) {
           state.todos = state.todos.filter((todo) => todo._id !== _id);
         }
+        console.log(state.todos);
       })
       .addCase(patchTodo.fulfilled, (state, action) => {
+        console.log('pat');
         state.todos = state.todos.map((todo) =>
           todo._id === action.payload._id ? action.payload : todo
         );
+        console.log(state.todos);
+      })
+      .addCase(getTodo.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.currentTodo = action.payload;
       });
   },
 });
