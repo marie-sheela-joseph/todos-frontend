@@ -138,6 +138,19 @@ export const todosSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
+    resetCurrentTodo: (state) => {
+      state.currentTodo = {
+        _id: '',
+        title: '',
+        completed: false,
+        assignedTo: [''],
+        createdAt: new Date(),
+        moreDetails: {
+          priority: 1,
+          dueDate: new Date(),
+        },
+      };
+    },
     // increment: (state) => {
     //   // Redux Toolkit allows us to write "mutating" logic in reducers. It
     //   // doesn't actually mutate the state because it uses the Immer library,
@@ -194,7 +207,7 @@ export const todosSlice = createSlice({
   },
 });
 
-export const {} = todosSlice.actions;
+export const { resetCurrentTodo } = todosSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

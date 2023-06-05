@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { getTodo } from "src/store/slices/todos/todosSlice"
+import { getTodo ,resetCurrentTodo} from "src/store/slices/todos/todosSlice"
 import { useAppDispatch } from "src/store/hooks"
 import { useAppSelector } from "src/store/hooks"
 
@@ -11,6 +11,9 @@ const Todo=(props:any)=>{
         console.log(props.match.params.x)
         dispatch(getTodo(String(props.match.params.x)))
         console.log(currentTodo)
+        return ()=>{
+            dispatch(resetCurrentTodo())
+        }
     },[props.match.params.x])
     return (
         <div>                
